@@ -13,10 +13,11 @@ export default class SignInForm extends Component {
             hasSignedIn: false
         }
 
+
         this.submitForm = this.submitForm.bind(this)
     }
 
-    submitForm(e) {
+    submitForm() {
         const socket = io(`${config.server_base_url}`)
 
         socket.emit('auth:sign_in', {
@@ -28,6 +29,7 @@ export default class SignInForm extends Component {
             if (!data.res) { // Положительный ответ от сервера
                 cookies.set('id', data.user.id)
                 cookies.set('token', data.user.token)
+                this.props.handleSuccessefulAuthentication(data.user)
                 this.setState({ hasSignedIn: true })
             } else {
                 socket.close()
