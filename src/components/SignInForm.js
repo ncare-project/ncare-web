@@ -1,0 +1,49 @@
+import React, { Component } from 'react'
+import io from 'socket.io-client'
+import config from '../config'
+import Cookies from 'universal-cookie'
+import { Redirect } from 'react-router-dom'
+
+const cookies = new Cookies()
+
+export default class SignInForm extends Component { 
+    constructor(props) {
+        super(props)
+        this.state = {
+            hasSignedIn: false
+        }
+
+        this.submitForm = this.submitForm.bind(this)
+    }
+
+    submitForm(e) {
+        const socket = io(`${config.server_base_url}`)
+
+        socket.emit('auth:sign_in', {
+            email: this.emailInput.value,
+            password: this.passwordInput.value
+        })
+
+        socket.on('auth:sign_in', data => {
+            if (!data.res) { // Положительный ответ от сервера
+                cookies.set('id', data.user.id)
+                cookies.set('token', data.user.token)
+                this.setState({ hasSignedIn: true })
+            } else {
+                socket.close()
+            }
+        })
+    }
+
+    render() {
+        return (
+            <div>
+                <input type='email' ref={node => this.emailInput = node}></input>
+                <input type='password' ref={node => this.passwordInput = node}></input>
+                <button onClick={this.submitForm}>Submit</button>
+
+                {this.state.hasSignedIn ? <Redirect to='/'/> : ''}
+            </div>
+        )
+    }
+}
