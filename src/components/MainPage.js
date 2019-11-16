@@ -22,6 +22,7 @@ export default class componentName extends Component {
                 {this.props.isSignedIn ? 
                     <>
                         <Link to='/profile'>Profile</Link>
+                        <Link to='/create_organisation'>Create organisation</Link>
                         <span onClick={this.props.handleUserExit}>Sign out</span>
                     </>
                  : ''}

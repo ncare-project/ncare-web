@@ -6,13 +6,9 @@ import { Redirect } from 'react-router-dom'
 
 const cookies = new Cookies()
 
-export default class SignInForm extends Component { 
+export default class OrganisationCreationForm extends Component { 
     constructor(props) {
         super(props)
-        this.state = {
-            hasSignedIn: false
-        }
-
 
         this.submitForm = this.submitForm.bind(this)
     }
@@ -20,18 +16,15 @@ export default class SignInForm extends Component {
     submitForm() {
         const socket = io(`${config.server_base_url}`)
 
-        socket.emit('auth:sign_in', {
-            email: this.emailInput.value,
-            password: this.passwordInput.value
+        socket.emit('orgs:create', {
+            name: this.nameInput.value,
+            description: this.descriptionInput.value
         })
 
-        socket.on('auth:sign_in', data => {
+        socket.on('orgs:create', data => {
             if (!data.res) { 
                 // Положительный ответ от сервера
-                
-                cookies.set('id', data.user.id)
-                cookies.set('token', data.user.token)
-                this.props.handleSuccessefulAuthentication(data.user)
+
                 this.setState({ hasSignedIn: true })
             } else {
                 socket.close()
@@ -42,11 +35,9 @@ export default class SignInForm extends Component {
     render() {
         return (
             <div>
-                <input type='email' ref={node => this.emailInput = node}></input>
-                <input type='password' ref={node => this.passwordInput = node}></input>
+                <input ref={node => this.nameInput = node}></input>
+                <textarea cols={40} rows={10} ref={node => this.descriptionInput = node}></textarea>
                 <button onClick={this.submitForm}>Submit</button>
-
-                {this.state.hasSignedIn ? <Redirect to='/'/> : ''}
             </div>
         )
     }

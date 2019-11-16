@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import MainPage from './MainPage'
 import SignUpForm from './SignUpForm'
 import SignInForm from './SignInForm'
+import OrganisationCreationForm from './OrganisationCreationForm'
 import UserProfile from './UserProfile'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import io from 'socket.io-client'
@@ -77,6 +78,9 @@ export default class App extends Component {
                 }/>
                 <Route path='/sign_up' render={() =>
                      <SignUpForm handleSuccessefulAuthentication={this.handleSuccessefulAuthentication} />
+                }/>
+                <Route path='/create_organisation' render={() =>
+                     <OrganisationCreationForm />
                 }/>
                 <Route path='/profile' render={() => 
                     <UserProfile user={this.state.user} />

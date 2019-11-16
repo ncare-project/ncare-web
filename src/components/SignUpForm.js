@@ -26,7 +26,9 @@ export default class SignUpForm extends Component {
         })
 
         socket.on('auth:sign_up', data => {
-            if (!data.res) { // Положительный ответ от сервера
+            if (!data.res) { 
+                // Положительный ответ от сервера
+                
                 cookies.set('id', data.user.id)
                 cookies.set('token', data.user.token)
                 this.props.handleSuccessefulAuthentication(data.user)
