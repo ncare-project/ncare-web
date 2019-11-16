@@ -18,6 +18,9 @@ export default class componentName extends Component {
         this.setState({
             isSignedIn: false
         })
+
+        cookies.remove('id')
+        cookies.remove('token')
     }
 
     render() {
