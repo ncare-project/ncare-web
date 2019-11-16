@@ -10,6 +10,7 @@ import config from '../config'
 import Cookies from 'universal-cookie'
 
 const cookies = new Cookies()
+window.socket = io(`${config.server_base_url}`)
 
 export default class App extends Component {
     constructor(props) {
@@ -21,34 +22,30 @@ export default class App extends Component {
         }
 
         this.handleUserExit = this.handleUserExit.bind(this)
-        this.checkIfSignedIn = this.checkIfSignedIn.bind(this)
         this.handleSuccessefulAuthentication = this.handleSuccessefulAuthentication.bind(this)
-        this.checkIfSignedIn()
+        this.connectSocket = this.connectSocket.bind(this)
+
+        this.connectSocket()
     }
 
-    checkIfSignedIn() {
-        const socket = io(`${config.server_base_url}`)
-        
-        if (cookies.get('id') && cookies.get('token')) {
-            socket.emit('auth:import_auth', {
+    connectSocket() {
+        window.socket.on('connect', () => {
+            window.socket.emit('auth:import_auth', {
                 id: cookies.get('id'),
                 token: cookies.get('token')
             })
-
-            socket.on('auth:import_auth', data => {
+        
+            window.socket.on('auth:import_auth', data => {
                 if (!data.res) {
-                    // Положительный ответ сервера  
+                    // Положительный ответ сервера
+        
                     this.setState({
                         isSignedIn: true,
                         user: data.user
                     })
                 }
-
-                socket.close()
             })
-        } else {
-            socket.close()
-        }
+        })
     }
 
     handleUserExit() {

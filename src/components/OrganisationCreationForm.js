@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import io from 'socket.io-client'
 import config from '../config'
 import Cookies from 'universal-cookie'
-import { Redirect } from 'react-router-dom'
 
 const cookies = new Cookies()
 
@@ -14,20 +13,16 @@ export default class OrganisationCreationForm extends Component {
     }
 
     submitForm() {
-        const socket = io(`${config.server_base_url}`)
-
-        socket.emit('orgs:create', {
+        window.socket.emit('orgs:create', {
             name: this.nameInput.value,
             description: this.descriptionInput.value
         })
 
-        socket.on('orgs:create', data => {
+        window.socket.on('orgs:create', data => {
             if (!data.res) { 
                 // Положительный ответ от сервера
 
                 this.setState({ hasSignedIn: true })
-            } else {
-                socket.close()
             }
         })
     }

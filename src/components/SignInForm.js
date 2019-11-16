@@ -18,14 +18,14 @@ export default class SignInForm extends Component {
     }
 
     submitForm() {
-        const socket = io(`${config.server_base_url}`)
+        // const socket = io(`${config.server_base_url}`)
 
-        socket.emit('auth:sign_in', {
+        window.socket.emit('auth:sign_in', {
             email: this.emailInput.value,
             password: this.passwordInput.value
         })
 
-        socket.on('auth:sign_in', data => {
+        window.socket.on('auth:sign_in', data => {
             if (!data.res) { 
                 // Положительный ответ от сервера
                 
@@ -34,7 +34,7 @@ export default class SignInForm extends Component {
                 this.props.handleSuccessefulAuthentication(data.user)
                 this.setState({ hasSignedIn: true })
             } else {
-                socket.close()
+                window.socket.close()
             }
         })
     }

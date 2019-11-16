@@ -17,24 +17,24 @@ export default class SignUpForm extends Component {
     }
 
     submitForm(e) {
-        const socket = io(`${config.server_base_url}`)
+        // const socket = io(`${config.server_base_url}`)
 
-        socket.emit('auth:sign_up', {
+        window.socket.emit('auth:sign_up', {
             email: this.emailInput.value,
             password: this.passwordInput.value,
             nickname: this.nicknameInput.value
         })
 
-        socket.on('auth:sign_up', data => {
+        window.socket.on('auth:sign_up', data => {
             if (!data.res) { 
                 // Положительный ответ от сервера
-                
+
                 cookies.set('id', data.user.id)
                 cookies.set('token', data.user.token)
                 this.props.handleSuccessefulAuthentication(data.user)
                 this.setState({ hasSignedUp: true })
             } else {
-                socket.close()
+                window.socket.close()
             }
         })
     }
