@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import io from 'socket.io-client'
-import config from '../config'
+import config from '../../config'
 import Cookies from 'universal-cookie'
 
 const cookies = new Cookies()

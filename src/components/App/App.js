@@ -1,18 +1,18 @@
 import React, { Component } from 'react'
-import MainPage from './MainPage'
-import SignUpForm from './SignUpForm'
-import SignInForm from './SignInForm'
-import OrganisationCreationForm from './OrganisationCreationForm'
-import UserProfile from './UserProfile'
+import MainPage from '../MainPage/MainPage'
+import SignUpForm from '../SignUpForm/SignUpForm'
+import SignInForm from '../SignInForm/SignInForm'
+import OrganisationCreationForm from '../OrganisationCreationForm/OrganisationCreationForm'
+import UserProfile from '../UserProfile/UserProfile'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import io from 'socket.io-client'
-import config from '../config'
+import config from '../../config'
 import Cookies from 'universal-cookie'
 
 const cookies = new Cookies()
 window.socket = io(`${config.server_base_url}`)
 
-export default class App extends Component {
+class App extends Component {
     constructor(props) {
         super(props)
 
@@ -86,3 +86,5 @@ export default class App extends Component {
         )
     }
 }
+
+export default App
