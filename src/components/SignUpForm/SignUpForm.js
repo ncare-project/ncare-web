@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import Cookies from 'universal-cookie'
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
+import injectStyles from 'react-jss'
+import styles from './SignUpFormStyles'
 
 const cookies = new Cookies()
 
-export default class SignUpForm extends Component { 
+class SignUpForm extends Component { 
     constructor(props) {
         super(props)
         this.state = {
@@ -14,9 +16,7 @@ export default class SignUpForm extends Component {
         this.submitForm = this.submitForm.bind(this)
     }
 
-    submitForm(e) {
-        // const socket = io(`${config.server_base_url}`)
-
+    submitForm() {
         window.socket.emit('auth:sign_up', {
             email: this.emailInput.value,
             password: this.passwordInput.value,
@@ -31,22 +31,41 @@ export default class SignUpForm extends Component {
                 cookies.set('token', data.user.token)
                 this.props.handleSuccessefulAuthentication(data.user)
                 this.setState({ hasSignedUp: true })
-            } else {
-                window.socket.close()
             }
         })
     }
 
     render() {
-        return (
-            <div>
-                <input type='email' ref={node => this.emailInput = node}></input>
-                <input type='password' ref={node => this.passwordInput = node}></input>
-                <input ref={node => this.nicknameInput = node}></input>
-                <button onClick={this.submitForm} >Submit</button>
+        const { classes } = this.props
 
+        return (
+            <div className={classes.authCard}>
+                <div className={classes.rightCard}>
+                    <h2>Sign Up</h2>
+                    <div className={classes.inputBox}>
+                        <p className={classes.inputLabel}>E-mail</p>
+                        <input type='email' ref={node => this.emailInput = node} placeholder={'Enter your e-mail'}></input>
+                    </div>
+                    <div className={classes.inputBox}>
+                        <p className={classes.inputLabel}>Password</p>
+                        <input type='password' ref={node => this.passwordInput = node} placeholder={'Enter your password'}></input>
+                    </div>
+                    <div className={classes.inputBox}>
+                        <p className={classes.inputLabel}>Nickname</p>
+                        <input ref={node => this.nicknameInput = node} placeholder={'Enter your nickname'}></input>
+                    </div>       
+                    
+                    <div className={classes.formBtn} onClick={this.submitForm}>Sign up</div>
+                </div>
+
+                <div className={classes.leftCard}>
+                    <h2>Are you already a user?</h2>
+                    <Link to='/sign_in'>Sign in</Link>
+                </div>
                 {this.state.hasSignedUp ? <Redirect to='/'/> : ''}
             </div>
         )
     }
 }
+
+export default injectStyles(styles)(SignUpForm)

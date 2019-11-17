@@ -1,23 +1,22 @@
 import React, { Component } from 'react'
 import Cookies from 'universal-cookie'
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
+import injectStyles from 'react-jss'
+import styles from './SignInFormStyles'
 
 const cookies = new Cookies()
 
-export default class SignInForm extends Component { 
+class SignInForm extends Component { 
     constructor(props) {
         super(props)
         this.state = {
             hasSignedIn: false
         }
 
-
         this.submitForm = this.submitForm.bind(this)
     }
 
     submitForm() {
-        // const socket = io(`${config.server_base_url}`)
-
         window.socket.emit('auth:sign_in', {
             email: this.emailInput.value,
             password: this.passwordInput.value
@@ -31,21 +30,36 @@ export default class SignInForm extends Component {
                 cookies.set('token', data.user.token)
                 this.props.handleSuccessefulAuthentication(data.user)
                 this.setState({ hasSignedIn: true })
-            } else {
-                window.socket.close()
             }
         })
     }
 
     render() {
-        return (
-            <div>
-                <input type='email' ref={node => this.emailInput = node}></input>
-                <input type='password' ref={node => this.passwordInput = node}></input>
-                <button onClick={this.submitForm}>Submit</button>
+        const { classes } = this.props
 
+        return (
+            <div className={classes.authCard}>
+                <div className={classes.rightCard}>
+                    <h2>Sign in</h2>
+                    <div className={classes.inputBox}>
+                        <p className={classes.inputLabel}>E-mail</p>
+                        <input type='email' ref={node => this.emailInput = node} placeholder={'Enter your e-mail'}></input>
+                    </div>
+                    <div className={classes.inputBox}>
+                        <p className={classes.inputLabel}>Password</p>
+                        <input type='password' ref={node => this.passwordInput = node} placeholder={'Enter your password'}></input>
+                    </div>
+                    <div className={classes.formBtn} onClick={this.submitForm}>Sign in</div>
+                </div>
+
+                <div className={classes.leftCard}>
+                    <h2>Are you new on the site?</h2>
+                    <Link to='/sign_up'>Sign up</Link>
+                </div>
                 {this.state.hasSignedIn ? <Redirect to='/'/> : ''}
             </div>
         )
     }
 }
+
+export default injectStyles(styles)(SignInForm)
