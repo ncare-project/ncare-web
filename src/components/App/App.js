@@ -4,10 +4,13 @@ import SignUpForm from '../SignUpForm/SignUpForm'
 import SignInForm from '../SignInForm/SignInForm'
 import OrganisationCreationForm from '../OrganisationCreationForm/OrganisationCreationForm'
 import UserProfile from '../UserProfile/UserProfile'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import ReportsMap from '../ReportsMap/ReportsMap'
+import { BrowserRouter as Router, Route, useHistory } from 'react-router-dom'
 import io from 'socket.io-client'
 import config from '../../config'
 import Cookies from 'universal-cookie'
+import injectStyles from 'react-jss'
+import styles from './AppStyles'
 
 const cookies = new Cookies()
 window.socket = io(`${config.server_base_url}`)
@@ -77,14 +80,17 @@ class App extends Component {
                      <SignUpForm handleSuccessefulAuthentication={this.handleSuccessefulAuthentication} />
                 }/>
                 <Route path='/create_organisation' render={() =>
-                     <OrganisationCreationForm />
+                     <OrganisationCreationForm isSignedIn={this.state.isSignedIn} handleUserExit={this.handleUserExit}/>
+                }/>
+                <Route path='/reports_map' render={() =>
+                     <ReportsMap isSignedIn={this.state.isSignedIn} handleUserExit={this.handleUserExit}/>
                 }/>
                 <Route path='/profile' render={() => 
-                    <UserProfile user={this.state.user} />
+                    <UserProfile user={this.state.user} isSignedIn={this.state.isSignedIn} handleUserExit={this.handleUserExit}/>
                 }/>
             </Router>
         )
     }
 }
 
-export default App
+export default injectStyles(styles)(App)
