@@ -57,9 +57,9 @@ class SignInForm extends Component {
 
                     <div className={classes.leftCard}>
                         <h2>Are you new on the site?</h2>
-                        <Link to='/sign_up'>Sign up</Link>
+                        <Link to='/'>Sign up</Link>
                     </div>
-                    {this.state.hasSignedIn ? <Redirect to='/'/> : ''}
+                    {this.state.hasSignedIn || this.props.isSignedIn ? <Redirect to='/reports_list'/> : ''}
                 </div>
             </>
         )

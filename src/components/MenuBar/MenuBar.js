@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import injectStyles from 'react-jss'
 import styles from './MenuBarStyles'
+import AppLogo from '../AppLogo/AppLogo'
 
 class MenuBar extends Component {
     constructor(props) {
@@ -13,6 +14,7 @@ class MenuBar extends Component {
 
         return (
             <div className={this.props.sideMenu ? `${classes.sideMenu}` : ''}>
+                <AppLogo secondary/>
                 {!this.props.isSignedIn ?
                     <>
                         <Link to='/sign_up'>Sign up</Link>
@@ -27,7 +29,7 @@ class MenuBar extends Component {
                         <Link to='/reports_list'>Reports</Link>
                         <Link to='/reports_map'>Map</Link>
                         <Link to='/create_organisation'>Create organisation</Link>
-                        <span onClick={this.props.handleUserExit}>Sign out</span>
+                        <a onClick={this.props.handleUserExit}>Sign out</a>
                     </>
                  : ''}
 

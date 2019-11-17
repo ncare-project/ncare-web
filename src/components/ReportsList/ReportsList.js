@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import MenuBar from '../MenuBar/MenuBar'
+import injectStyles from 'react-jss'
+import styles from './ReportsListStyles'
 
-export default class ReportsList extends Component {
+class ReportsList extends Component {
     constructor(props) {
         super(props)
 
@@ -23,17 +25,23 @@ export default class ReportsList extends Component {
     }
 
     render() {
+        const { classes } = this.props
+
         return (
             <div className='two-columns'>
                 <MenuBar isSignedIn={this.props.isSignedIn} sideMenu/>
 
-                {this.state.reports.map((report, index) => (
-                    <div>
-                        <h2>{report.name}</h2>
-                        <p>{report.description}</p>
-                    </div>
-                ))}
+                <div className={classes.reportsList}>
+                    {this.state.reports.map((report, index) => (
+                        <div className={classes.reportCard}>
+                            <h2>{report.name}</h2>
+                            <p>{report.description}</p>
+                        </div>
+                    ))}
+                </div>
             </div>
         )
     }
 }
+
+export default injectStyles(styles)(ReportsList)

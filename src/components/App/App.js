@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import MainPage from '../MainPage/MainPage'
 import SignUpForm from '../SignUpForm/SignUpForm'
 import SignInForm from '../SignInForm/SignInForm'
 import OrganisationCreationForm from '../OrganisationCreationForm/OrganisationCreationForm'
@@ -95,14 +94,11 @@ class App extends Component {
     render() {
         return (
             <Router>
-                <Route path='/' exact render={() =>
-                     <MainPage handleUserExit={this.handleUserExit} isSignedIn={this.state.isSignedIn} />
-                }/>
                 <Route path='/sign_in' render={() =>
-                     <SignInForm handleSuccessefulAuthentication={this.handleSuccessefulAuthentication} />
+                     <SignInForm isSignedIn={this.state.isSignedIn} handleSuccessefulAuthentication={this.handleSuccessefulAuthentication} />
                 }/>
-                <Route path='/sign_up' render={() =>
-                     <SignUpForm handleSuccessefulAuthentication={this.handleSuccessefulAuthentication} />
+                <Route path='/' exact render={() =>
+                     <SignUpForm isSignedIn={this.state.isSignedIn} handleSuccessefulAuthentication={this.handleSuccessefulAuthentication} />
                 }/>
                 <Route path='/create_organisation' render={() =>
                      <OrganisationCreationForm isSignedIn={this.state.isSignedIn} 

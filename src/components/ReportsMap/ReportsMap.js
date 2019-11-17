@@ -27,16 +27,18 @@ export default class ReportsMap extends Component {
         window.socket.emit('orgs:zones')
 
         window.socket.on('orgs:zones', data => {
-            console.log(data)
             if (!data.res) { 
                 // Положительный ответ от сервера
                 this.setState({
                     markers: data.zones.map(
-                        zone => ({
+                        zone => 
+                        {  
+                            return {
                                 name: zone.name,
-                                coordinates: zone.location.coordinates,
+                                coordinates: [zone.coordinates[1], zone.coordinates[0]],
                                 radius: zone.radius
-                        })
+                            }
+                        }
                     )
                 })
             }
@@ -49,7 +51,7 @@ export default class ReportsMap extends Component {
             
             window.socket.emit('orgs:create_zone', {
                 name: this.nameInput.value,
-                coordinates: this.state.markers[selectedPoint].coordinates,
+                coordinates: this.state.markers[selectedPoint].coordinates.reverse(),
                 radius: Number(this.radiusInput.value)
             })
 
@@ -60,7 +62,7 @@ export default class ReportsMap extends Component {
                         let newMarkers = prevState.markers
                         newMarkers[this.state.selectedPoint] = {
                             name: data.zone.name,
-                            coordinates: data.zone.coordinates,
+                            coordinates: data.zone.coordinates.reverse(),
                             radius: data.zone.radius
                         }
 
@@ -76,12 +78,15 @@ export default class ReportsMap extends Component {
 
     render() {
         return (
-            <div className='two-columns
-            '>
+            <div className='two-columns'>
                 <MenuBar handleUserExit={this.props.handleUserExit} sideMenu isSignedIn={this.props.isSignedIn}>
-                    <input ref={node => this.nameInput = node}></input>
-                    <input ref={node => this.radiusInput = node}></input>
-                    <button onClick={this.handleInfoEdit}>Submit</button>
+                    <div className='new-zone-form'>
+                        <p>Name of zone</p>
+                        <input ref={node => this.nameInput = node} placeholder={'Enter name of a zone'}></input>
+                        <p>Radius of a zone</p>
+                        <input ref={node => this.radiusInput = node} placeholder={'Enter radius of a zone'}></input>
+                        <div onClick={this.handleInfoEdit}>Create a point</div>
+                    </div>
                 </MenuBar>
 
                 <YMaps>

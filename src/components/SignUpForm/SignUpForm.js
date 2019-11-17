@@ -65,7 +65,7 @@ class SignUpForm extends Component {
                         <h2>Are you already a user?</h2>
                         <Link to='/sign_in'>Sign in</Link>
                     </div>
-                    {this.state.hasSignedUp ? <Redirect to='/'/> : ''}
+                    {this.state.hasSignedUp || this.props.isSignedIn ? <Redirect to='/reports_list'/> : ''}
                 </div>
             </>
         )

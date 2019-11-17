@@ -29,7 +29,7 @@ export default {
     '@global': {
         'html': {
             fontFamily: 'Open Sans',
-            backgroundColor: '#f7fff3'
+            backgroundColor: '#f7fff3',
         },
         'body': {
             width: '100%',
@@ -47,7 +47,39 @@ export default {
             display: 'flex',
             flexFlow: 'row nowrap',
             '& > :first-child': {
-                width: '300px'
+                minWidth: '300px'
+            }
+        },
+        '.new-zone-form': {
+            display: 'flex',
+            flexFlow: 'column nowrap',
+            alignItems: 'center',
+            backgroundColor: '#fff',
+            width: '250px',
+            margin: '0 auto',
+            color: '#000',
+            padding: '10px',
+            '& input': {
+                width: '220px',
+                fontSize: '12px',
+                border: 'none',
+                padding: '4px',
+                marginBottom: '12px',
+                outline: 'none'
+            },
+            '& div': {
+                width: '220px',
+                height: '40px',
+                backgroundColor: '#7ab439',
+                color: '#fff',
+                borderRadius: '2px',
+                textAlign: 'center',
+                lineHeight: '40px',
+                transition: '0.2s all',
+                '&:hover': {
+                    cursor: 'pointer',
+                    backgroundColor: '#6aa429'
+                }
             }
         }
     }
