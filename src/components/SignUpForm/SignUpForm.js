@@ -3,6 +3,7 @@ import Cookies from 'universal-cookie'
 import { Redirect, Link } from 'react-router-dom'
 import injectStyles from 'react-jss'
 import styles from './SignUpFormStyles'
+import AppLogo from '../AppLogo/AppLogo'
 
 const cookies = new Cookies()
 
@@ -39,31 +40,34 @@ class SignUpForm extends Component {
         const { classes } = this.props
 
         return (
-            <div className={classes.authCard}>
-                <div className={classes.rightCard}>
-                    <h2>Sign Up</h2>
-                    <div className={classes.inputBox}>
-                        <p className={classes.inputLabel}>E-mail</p>
-                        <input type='email' ref={node => this.emailInput = node} placeholder={'Enter your e-mail'}></input>
+            <>
+                <AppLogo primary/>
+                <div className={classes.authCard}>
+                    <div className={classes.rightCard}>
+                        <h2>Sign Up</h2>
+                        <div className={classes.inputBox}>
+                            <p className={classes.inputLabel}>E-mail</p>
+                            <input type='email' ref={node => this.emailInput = node} placeholder={'Enter your e-mail'}></input>
+                        </div>
+                        <div className={classes.inputBox}>
+                            <p className={classes.inputLabel}>Password</p>
+                            <input type='password' ref={node => this.passwordInput = node} placeholder={'Enter your password'}></input>
+                        </div>
+                        <div className={classes.inputBox}>
+                            <p className={classes.inputLabel}>Nickname</p>
+                            <input ref={node => this.nicknameInput = node} placeholder={'Enter your nickname'}></input>
+                        </div>       
+                        
+                        <div className={classes.formBtn} onClick={this.submitForm}>Sign up</div>
                     </div>
-                    <div className={classes.inputBox}>
-                        <p className={classes.inputLabel}>Password</p>
-                        <input type='password' ref={node => this.passwordInput = node} placeholder={'Enter your password'}></input>
-                    </div>
-                    <div className={classes.inputBox}>
-                        <p className={classes.inputLabel}>Nickname</p>
-                        <input ref={node => this.nicknameInput = node} placeholder={'Enter your nickname'}></input>
-                    </div>       
-                    
-                    <div className={classes.formBtn} onClick={this.submitForm}>Sign up</div>
-                </div>
 
-                <div className={classes.leftCard}>
-                    <h2>Are you already a user?</h2>
-                    <Link to='/sign_in'>Sign in</Link>
+                    <div className={classes.leftCard}>
+                        <h2>Are you already a user?</h2>
+                        <Link to='/sign_in'>Sign in</Link>
+                    </div>
+                    {this.state.hasSignedUp ? <Redirect to='/'/> : ''}
                 </div>
-                {this.state.hasSignedUp ? <Redirect to='/'/> : ''}
-            </div>
+            </>
         )
     }
 }

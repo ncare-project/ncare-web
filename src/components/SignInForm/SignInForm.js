@@ -3,6 +3,7 @@ import Cookies from 'universal-cookie'
 import { Redirect, Link } from 'react-router-dom'
 import injectStyles from 'react-jss'
 import styles from './SignInFormStyles'
+import AppLogo from '../AppLogo/AppLogo'
 
 const cookies = new Cookies()
 
@@ -38,26 +39,29 @@ class SignInForm extends Component {
         const { classes } = this.props
 
         return (
-            <div className={classes.authCard}>
-                <div className={classes.rightCard}>
-                    <h2>Sign in</h2>
-                    <div className={classes.inputBox}>
-                        <p className={classes.inputLabel}>E-mail</p>
-                        <input type='email' ref={node => this.emailInput = node} placeholder={'Enter your e-mail'}></input>
+            <>
+                <AppLogo primary/>
+                <div className={classes.authCard}>
+                    <div className={classes.rightCard}>
+                        <h2>Sign in</h2>
+                        <div className={classes.inputBox}>
+                            <p className={classes.inputLabel}>E-mail</p>
+                            <input type='email' ref={node => this.emailInput = node} placeholder={'Enter your e-mail'}></input>
+                        </div>
+                        <div className={classes.inputBox}>
+                            <p className={classes.inputLabel}>Password</p>
+                            <input type='password' ref={node => this.passwordInput = node} placeholder={'Enter your password'}></input>
+                        </div>
+                        <div className={classes.formBtn} onClick={this.submitForm}>Sign in</div>
                     </div>
-                    <div className={classes.inputBox}>
-                        <p className={classes.inputLabel}>Password</p>
-                        <input type='password' ref={node => this.passwordInput = node} placeholder={'Enter your password'}></input>
-                    </div>
-                    <div className={classes.formBtn} onClick={this.submitForm}>Sign in</div>
-                </div>
 
-                <div className={classes.leftCard}>
-                    <h2>Are you new on the site?</h2>
-                    <Link to='/sign_up'>Sign up</Link>
+                    <div className={classes.leftCard}>
+                        <h2>Are you new on the site?</h2>
+                        <Link to='/sign_up'>Sign up</Link>
+                    </div>
+                    {this.state.hasSignedIn ? <Redirect to='/'/> : ''}
                 </div>
-                {this.state.hasSignedIn ? <Redirect to='/'/> : ''}
-            </div>
+            </>
         )
     }
 }

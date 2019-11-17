@@ -30,6 +30,25 @@ export default {
         'html': {
             fontFamily: 'Open Sans',
             backgroundColor: '#f7fff3'
+        },
+        'body': {
+            width: '100%',
+            margin: 0
+        },
+        '.root': {
+            width: '100vw',
+            height: '100vh'
+        }, 
+        'a': {
+            color: 'inherit',
+            textDecoration: 'none'
+        },
+        '.two-columns': {
+            display: 'flex',
+            flexFlow: 'row nowrap',
+            '& > :first-child': {
+                width: '300px'
+            }
         }
     }
 }

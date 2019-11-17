@@ -10,7 +10,7 @@ export default class ReportsMap extends Component {
             selectedPoint: null,
             markers: [
                 {
-                    hint: 'testdsgdsgds',
+                    name: 'testdsgdsgds',
                     coordinates: [55.7, 37.6],
                     radius: 10000
                 }
@@ -24,12 +24,21 @@ export default class ReportsMap extends Component {
     }
 
     getZones() {
-        window.socket.emit('orgs:get_zones')
+        window.socket.emit('orgs:zones')
 
-        window.socket.on('orgs:get_zones', data => {
+        window.socket.on('orgs:zones', data => {
             console.log(data)
             if (!data.res) { 
                 // Положительный ответ от сервера
+                this.setState({
+                    markers: data.zones.map(
+                        zone => ({
+                                name: zone.name,
+                                coordinates: zone.location.coordinates,
+                                radius: zone.radius
+                        })
+                    )
+                })
             }
         })
     }
@@ -37,17 +46,28 @@ export default class ReportsMap extends Component {
     handleInfoEdit() {
         if (this.state.selectedPoint) {
             const selectedPoint = this.state.selectedPoint
-
+            
             window.socket.emit('orgs:create_zone', {
-                name: this.state.markers[selectedPoint].hint,
+                name: this.nameInput.value,
                 coordinates: this.state.markers[selectedPoint].coordinates,
-                radius: this.state.markers[selectedPoint].radius
+                radius: Number(this.radiusInput.value)
             })
 
             window.socket.on('orgs:create_zone', data => {
                 if (!data.res) { 
                     // Положительный ответ от сервера
-                    
+                    this.setState(prevState => {
+                        let newMarkers = prevState.markers
+                        newMarkers[this.state.selectedPoint] = {
+                            name: data.zone.name,
+                            coordinates: data.zone.coordinates,
+                            radius: data.zone.radius
+                        }
+
+                        return {
+                            markers: newMarkers
+                        }
+                    })
 
                 }
             })
@@ -56,28 +76,21 @@ export default class ReportsMap extends Component {
 
     render() {
         return (
-            <div style={{height: '800px'}}>
+            <div className='two-columns
+            '>
                 <MenuBar handleUserExit={this.props.handleUserExit} sideMenu isSignedIn={this.props.isSignedIn}>
                     <input ref={node => this.nameInput = node}></input>
                     <input ref={node => this.radiusInput = node}></input>
                     <button onClick={this.handleInfoEdit}>Submit</button>
                 </MenuBar>
-                {/* <Map center={[55.7007, 37.6]} zoom={10} onClick={data => {
-                    this.setState(prevState => ({
-                        markers: prevState.markers.concat([data.latLng])
-                    }))
-                }}>
-                    {this.state.markers.map((marker, index) => (
-                        <Marker key={`marker-${index}`} anchor={marker}/>
-                    ))}
-                </Map> */}
+
                 <YMaps>
                     <Map width={'100%'} height={'100vh'} 
                         defaultState={{ center: [55.75, 37.57], zoom: 9 }}
                         onClick={e => this.setState(prevState => ({
                             selectedPoint: prevState.markers.length,
                             markers: prevState.markers.concat({
-                                hint: '',
+                                name: '',
                                 coordinates: e.get('coords'),
                                 radius: 0
                             })
@@ -95,7 +108,7 @@ export default class ReportsMap extends Component {
                                             coordinates: marker.coordinates
                                         }}
                                         properties={{
-                                            iconContent: marker.hint.slice(0, 10)
+                                            iconContent: marker.name.slice(0, 10)
                                         }}
                                         options={{
                                             preset: `islands#${index === this.state.selectedPoint ? 'blue' : 'grey'}StretchyIcon`,
@@ -104,7 +117,7 @@ export default class ReportsMap extends Component {
                                     <GeoObject 
                                         geometry={{
                                             type: 'Circle',
-                                            coordinates: [55.7, 37.6],
+                                            coordinates: marker.coordinates,
                                             radius: marker.radius
                                         }}
                                     />

@@ -8,6 +8,10 @@ export default class OrganisationCreationForm extends Component {
     constructor(props) {
         super(props)
 
+        this.state = {
+            org: null
+        }
+
         this.submitForm = this.submitForm.bind(this)
     }
 
@@ -21,18 +25,29 @@ export default class OrganisationCreationForm extends Component {
             if (!data.res) { 
                 // Положительный ответ от сервера
 
-                this.setState({ hasSignedIn: true })
+                this.props.handleOrganisationCreation(data.org)
             }
         })
     }
 
     render() {
+        console.log(this.props.organisation.id);
+        console.log('test');
+        
         return (
-            <div>
-                <MenuBar sideBar handleUserExit={this.props.handleUserExit} isSignedIn={this.props.isSignedIn}/>
-                <input ref={node => this.nameInput = node}></input>
-                <textarea cols={40} rows={10} ref={node => this.descriptionInput = node}></textarea>
-                <button onClick={this.submitForm}>Submit</button>
+            <div className='two-columns'>
+                <MenuBar sideMenu handleUserExit={this.props.handleUserExit} isSignedIn={this.props.isSignedIn}/>
+                {!this.props.organisation.id ?
+                    <div>
+                        <input ref={node => this.nameInput = node}></input>
+                        <textarea cols={40} rows={10} ref={node => this.descriptionInput = node}></textarea>
+                        <button onClick={this.submitForm}>Submit</button>
+                    </div> :
+                    <div>
+                        <h2>{this.props.organisation.name}</h2>
+                        <p>{this.props.organisation.description}</p>
+                    </div>
+                }
             </div>
         )
     }

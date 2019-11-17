@@ -10,10 +10,12 @@ export default class UserProfile extends Component {
         const userInfo = this.props.user
 
         return (
-            <div>
+            <div className='two-columns'>
                 <MenuBar sideMenu handleUserExit={this.props.handleUserExit} isSignedIn={this.props.isSignedIn}/>
-                <h1>{userInfo.nickname}</h1>
-                <p>{userInfo.email}</p>
+                <div>
+                    <h1>{userInfo.nickname}</h1>
+                    <p>{userInfo.email}</p>
+                </div>
             </div>
         )
     }

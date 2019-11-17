@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import MenuBar from '../MenuBar/MenuBar'
 
-export default class componentName extends Component {
+export default class MainPage extends Component {
     constructor(props) {
         super(props)
     }
@@ -9,7 +9,8 @@ export default class componentName extends Component {
     render() {
         return (
             <div>
-                <MenuBar isSignedIn={this.props.isSignedIn} />
+                <MenuBar handleUserExit={this.props.handleUserExit} 
+                        isSignedIn={this.props.isSignedIn} />
             </div>
         )
     }

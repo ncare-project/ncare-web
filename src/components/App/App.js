@@ -5,6 +5,7 @@ import SignInForm from '../SignInForm/SignInForm'
 import OrganisationCreationForm from '../OrganisationCreationForm/OrganisationCreationForm'
 import UserProfile from '../UserProfile/UserProfile'
 import ReportsMap from '../ReportsMap/ReportsMap'
+import ReportsList from '../ReportsList/ReportsList'
 import { BrowserRouter as Router, Route, useHistory } from 'react-router-dom'
 import io from 'socket.io-client'
 import config from '../../config'
@@ -21,12 +22,15 @@ class App extends Component {
 
         this.state = {
             isSignedIn: false,
-            user: {}
+            isAdmin: false,
+            user: {},
+            organisation: {}
         }
 
         this.handleUserExit = this.handleUserExit.bind(this)
         this.handleSuccessefulAuthentication = this.handleSuccessefulAuthentication.bind(this)
         this.connectSocket = this.connectSocket.bind(this)
+        this.handleOrganisationCreation = this.handleOrganisationCreation.bind(this)
 
         this.connectSocket()
     }
@@ -45,6 +49,20 @@ class App extends Component {
                     this.setState({
                         isSignedIn: true,
                         user: data.user
+                    })
+                }
+            })
+
+            window.socket.emit('orgs:get')
+        
+            window.socket.on('orgs:get', data => {
+                console.log(data)
+                if (!data.res) {
+                    // Положительный ответ сервера
+        
+                    this.setState({
+                        isAdmin: true,
+                        organisation: data.org
                     })
                 }
             })
@@ -67,6 +85,13 @@ class App extends Component {
         })
     }
 
+    handleOrganisationCreation(organisation) {
+        this.setState({
+            isAdmin: true,
+            organisation
+        })
+    }
+
     render() {
         return (
             <Router>
@@ -80,7 +105,13 @@ class App extends Component {
                      <SignUpForm handleSuccessefulAuthentication={this.handleSuccessefulAuthentication} />
                 }/>
                 <Route path='/create_organisation' render={() =>
-                     <OrganisationCreationForm isSignedIn={this.state.isSignedIn} handleUserExit={this.handleUserExit}/>
+                     <OrganisationCreationForm isSignedIn={this.state.isSignedIn} 
+                                            handleUserExit={this.handleUserExit}
+                                            handleOrganisationCreation={this.handleOrganisationCreation}
+                                            organisation={this.state.organisation} />
+                }/>
+                <Route path='/reports_list' render={() =>
+                     <ReportsList isSignedIn={this.state.isSignedIn} handleUserExit={this.handleUserExit}/>
                 }/>
                 <Route path='/reports_map' render={() =>
                      <ReportsMap isSignedIn={this.state.isSignedIn} handleUserExit={this.handleUserExit}/>
