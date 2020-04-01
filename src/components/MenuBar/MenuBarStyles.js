@@ -2,7 +2,8 @@ export default {
     sideMenu: {
         display: 'flex',
         flexFlow: 'column nowrap',
-        position: 'relative',
+        position: 'sticky',
+        top: '0px',
         backgroundColor: '#7ab439',
         height: '100vh',
         color: '#fff',

@@ -55,7 +55,6 @@ class App extends Component {
             window.socket.emit('orgs:get')
         
             window.socket.on('orgs:get', data => {
-                console.log(data)
                 if (!data.res) {
                     // Положительный ответ сервера
         
@@ -73,7 +72,8 @@ class App extends Component {
         cookies.remove('token')
 
         this.setState({
-            isSignedIn: false
+            isSignedIn: false,
+            user: {}
         })
     }
 

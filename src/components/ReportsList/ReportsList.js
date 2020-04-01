@@ -20,8 +20,19 @@ class ReportsList extends Component {
                 this.setState({ reports: data.reports })
             }
         })
+        this.updateReports = this.updateReports.bind(this)
+        
+        this.updateReports()
+    }
 
-        console.log(this.props)
+    updateReports() {
+        window.socket.on("updates:reports:new", data => {
+            alert(`${data.report.name}: ${data.report.coordinates[0]} ${data.report.coordinates[1]}`)
+
+            this.setState(prevState => ({
+                reports: prevState.reports.concat(data.report)
+            }))
+        })
     }
 
     render() {
@@ -33,9 +44,12 @@ class ReportsList extends Component {
 
                 <div className={classes.reportsList}>
                     {this.state.reports.map((report, index) => (
-                        <div className={classes.reportCard}>
+                        <div key={index} className={classes.reportCard}>
                             <h2>{report.name}</h2>
                             <p>{report.description}</p>
+                            <p className={classes.reportPosition}>
+                                {report.coordinates[1]} <br /> {report.coordinates[0]}
+                            </p>
                         </div>
                     ))}
                 </div>

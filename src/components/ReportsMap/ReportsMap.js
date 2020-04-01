@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import MenuBar from '../MenuBar/MenuBar'
-import { YMaps, Map, Placemark, GeoObject } from 'react-yandex-maps'
+import { YMaps, Map, GeoObject } from 'react-yandex-maps'
 
 export default class ReportsMap extends Component {
     constructor(props) {
@@ -19,7 +19,7 @@ export default class ReportsMap extends Component {
 
         this.handleInfoEdit = this.handleInfoEdit.bind(this)
         this.getZones = this.getZones.bind(this)
-        
+
         this.getZones()
     }
 
@@ -81,7 +81,7 @@ export default class ReportsMap extends Component {
             <div className='two-columns'>
                 <MenuBar handleUserExit={this.props.handleUserExit} sideMenu isSignedIn={this.props.isSignedIn}>
                     <div className='new-zone-form'>
-                        <p>Name of zone</p>
+                        <p>Name of a zone</p>
                         <input ref={node => this.nameInput = node} placeholder={'Enter name of a zone'}></input>
                         <p>Radius of a zone</p>
                         <input ref={node => this.radiusInput = node} placeholder={'Enter radius of a zone'}></input>
@@ -124,6 +124,15 @@ export default class ReportsMap extends Component {
                                             type: 'Circle',
                                             coordinates: marker.coordinates,
                                             radius: marker.radius
+                                        }}
+                                        options={{
+                                            fillColor: `${index === this.state.selectedPoint ? '#1E99FF55' : '#AAAAAA33'}`,
+                                            // Stroke color.
+                                            strokeColor: `${index === this.state.selectedPoint ? '#1E99FF' : '#999999'}`,
+                                            // Stroke transparency.
+                                            strokeOpacity: 0.8,
+                                            // The width of the stroke in pixels.
+                                            strokeWidth: 5,
                                         }}
                                     />
                                 </>

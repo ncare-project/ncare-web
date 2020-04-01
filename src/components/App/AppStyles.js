@@ -32,7 +32,7 @@ export default {
             backgroundColor: '#f7fff3',
         },
         'body': {
-            width: '100%',
+            // width: '100%',
             margin: 0
         },
         '.root': {
@@ -48,6 +48,13 @@ export default {
             flexFlow: 'row nowrap',
             '& > :first-child': {
                 minWidth: '300px'
+            }
+        },
+        '.user-profile': {
+            margin: '32px 64px',
+            '& img': {
+                width: '128px',
+                borderRadius: '50%'
             }
         },
         '.new-zone-form': {
